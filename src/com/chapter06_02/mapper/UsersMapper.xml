@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.chapter06_02.mapper.UsersMapper">
+    <!--    sql标签重用-->
+    <sql id="usersColumns">
+        loginId,Name,Address,Phone,Mail
+    </sql>
+    <!--    按照指定的列名查询满足条件的用户-->
+    <select id="listUsers" parameterType="java.util.Properties" resultType="users">
+        select
+        <include refid="usersColumns"/>
+        from users where ${field} like concat ('%',#{value},'%')
+    </select>
+    <!-- 登录操作sql语句 -->
+    <select id="doLogin" parameterType="users" resultType="Integer" statementType="CALLABLE">
+        {call sp_login(#{loginId,mode=IN},#{loginPwd,mode=IN})}
+    </select>
+    <!--    修改信息操作sql-->
+    <update id="updateUsers" parameterType="java.util.Properties">
+        update users set ${field} = #{value} where LoginId = #{loginId} and LoginPwd = #{loginPwd}
+    </update>
+
+    <insert id="doRegister" parameterType="users" statementType="CALLABLE">
+        {call sp_registers(#{loginId,mode=IN},#{loginPwd,mode=IN})}
+    </insert>
+</mapper>
