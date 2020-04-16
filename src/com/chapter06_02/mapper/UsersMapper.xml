@@ -6,6 +6,34 @@
     <sql id="usersColumns">
         loginId,Name,Address,Phone,Mail
     </sql>
+
+    <!--    resultMap使用实例-->
+    <!--    用resultMap元素解决列名和类属性不一致-->
+    <resultMap id="resultMap" type="user">
+        <id property="id" column="t_id"/>
+        <result property="name" column="t_name"/>
+        <result property="age" column="t_age"/>
+    </resultMap>
+    <select id="findAllUser" resultMap="resultMap">
+        select * from t_user
+    </select>
+    <!--用resultMap元素实现通过有参构造方法将查询结果注入对象-->
+    <resultMap id="result" type="users">
+        <constructor>
+            <arg column="loginId" javaType="String"/>
+            <arg column="name" javaType="String"/>
+            <arg column="address" javaType="String"/>
+            <arg column="phone" javaType="String"/>
+            <arg column="mail" javaType="String"/>
+        </constructor>
+    </resultMap>
+    <select id="listUsersByCondition" parameterType="java.util.Properties" resultMap="result">
+        select
+        <include refid="usersColumns"/>
+        from users where ${name} like concat('%',#{value},'%')
+    </select>
+
+
     <!--    按照指定的列名查询满足条件的用户-->
     <select id="listUsers" parameterType="java.util.Properties" resultType="users">
         select
@@ -24,4 +52,6 @@
     <insert id="doRegister" parameterType="users" statementType="CALLABLE">
         {call sp_registers(#{loginId,mode=IN},#{loginPwd,mode=IN})}
     </insert>
+
+
 </mapper>

@@ -1,11 +1,12 @@
 package com.chapter06_02.dao.impl;
 
 import com.chapter06_02.dao.UserDao;
+import com.chapter06_02.domain.User;
 import com.chapter06_02.domain.Users;
 import com.chapter06_02.utils.MyBatisUtils;
+import com.chapter06_02.utils.MyBatisUtilsForDBmybatis;
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.stereotype.Repository;
-
 import java.util.List;
 import java.util.Properties;
 
@@ -18,6 +19,7 @@ public class UserDaoImpl implements UserDao {
      * 得到SqlSession
      */
     SqlSession sqlSession = MyBatisUtils.getSqlSession();
+    SqlSession sqlSessionForMybatis = MyBatisUtilsForDBmybatis.getSqlSession();
 
     /**
      * 模糊查询实现
@@ -84,5 +86,22 @@ public class UserDaoImpl implements UserDao {
         sqlSession.commit();    //插入操作需要将事务提交上去才能写入到数据库中
         sqlSession.close();
         return rows > 0 ? true : false;
+    }
+
+    @Override
+    public List<User> findAllUser() {
+        List<User> list = sqlSessionForMybatis.selectList("com.chapter06_02.mapper.UsersMapper.findAllUser");
+        sqlSession.close();
+        return list;
+    }
+
+    @Override
+    public List<Users> findListUsersByCondition(String field, String value) {
+        Properties properties = new Properties();
+        properties.setProperty("name", field);
+        properties.setProperty("value", value);
+        List<Users> users = sqlSession.selectList("com.chapter06_02.mapper.UsersMapper.listUsersByCondition", properties);
+        sqlSession.close();
+        return users;
     }
 }

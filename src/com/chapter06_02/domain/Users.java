@@ -32,6 +32,14 @@ public class Users {
         this.userStateId = userStateId;
     }
 
+    public Users(String loginId, String name, String address, String phone, String mail) {
+        this.loginId = loginId;
+        this.name = name;
+        this.address = address;
+        this.phone = phone;
+        this.mail = mail;
+    }
+
     public int getId() {
         return id;
     }

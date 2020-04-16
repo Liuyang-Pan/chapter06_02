@@ -1,10 +1,10 @@
 package com.chapter06_02.test;
 
+import com.chapter06_02.domain.User;
 import com.chapter06_02.domain.Users;
 import com.chapter06_02.service.UserService;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
-
 import java.util.List;
 import java.util.Scanner;
 
@@ -12,10 +12,21 @@ public class TestClass {
 
     public static void main(String[] args) {
         TestClass testClass = new TestClass();
-        testClass.test();
+        testClass.testFindAllUser();
+//        testClass.test();
 //        testClass.testUpdate();
 //        testClass.testRegister();
 //        testClass.testLogin();
+    }
+
+    public void testFindAllUser() {
+        ApplicationContext context = new ClassPathXmlApplicationContext("applicationContext.xml");
+        UserService userService = (UserService) context.getBean("userService");
+
+        List<User> list = userService.findAllUser();
+        for (User user : list) {
+            System.err.println(user);
+        }
     }
 
     public void test() {
@@ -28,7 +39,8 @@ public class TestClass {
         String field = scanner.next();
         System.err.println("请输入值：");
         String value = scanner.next();
-        List<Users> users = userService.listUsersByCondition(field, value);
+        //List<Users> users = userService.listUsersByCondition(field, value);
+        List<Users> users = userService.findListUsersByCondition(field, value);
         for (Users user : users) {
             System.err.println(user);
         }

@@ -1,5 +1,6 @@
 package com.chapter06_02.service;
 
+import com.chapter06_02.domain.User;
 import com.chapter06_02.domain.Users;
 
 import java.util.List;
@@ -43,4 +44,20 @@ public interface UserService {
      * @return true为注册成功，false为注册失败
      */
     public boolean doRegister(String name, String onePassword, String twoPassword);
+
+    /**
+     * 查找mybatis数据库中t_user表中的所有数据
+     *
+     * @return 所有用户信息
+     */
+    public List<User> findAllUser();
+
+    /**
+     * 从Users表中查找列为field，值包含value的所有用户信息
+     *
+     * @param field 列名
+     * @param value 值
+     * @return 符合的结果
+     */
+    public List<Users> findListUsersByCondition(String field, String value);
 }
