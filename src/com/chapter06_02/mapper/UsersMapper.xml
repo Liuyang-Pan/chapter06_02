@@ -4,7 +4,7 @@
 <mapper namespace="com.chapter06_02.mapper.UsersMapper">
     <!--    sql标签重用-->
     <sql id="usersColumns">
-        loginId,Name,Address,Phone,Mail
+        Id,loginId,Name,Address,Phone,Mail
     </sql>
 
     <!--    resultMap使用实例-->
@@ -20,6 +20,7 @@
     <!--用resultMap元素实现通过有参构造方法将查询结果注入对象-->
     <resultMap id="result" type="users">
         <constructor>
+            <arg column="id" javaType="_int"/>
             <arg column="loginId" javaType="String"/>
             <arg column="name" javaType="String"/>
             <arg column="address" javaType="String"/>
@@ -27,13 +28,35 @@
             <arg column="mail" javaType="String"/>
         </constructor>
     </resultMap>
-    <select id="listUsersByCondition" parameterType="java.util.Properties" resultMap="result">
+    <select id="listUsersByCondition" parameterType="java.util.Properties" resultType="users">
         select
         <include refid="usersColumns"/>
         from users where ${name} like concat('%',#{value},'%')
     </select>
 
+    <!--    通过用户LoginId查询用户信息  <if>实例-->
+    <select id="findUserInfo" parameterType="String" resultType="users">
+        select * from users where 1=1
+        <if test="_parameter!=null and _parameter !=''">
+            and loginId = #{loginId}
+        </if>
+    </select>
 
+    <!--查找符合条件的用户数，通过LoginId或者LoginPwd模糊查询，<choose>实例-->
+    <select id="findUserNumber" parameterType="users" resultType="Integer">
+        select count(*) from users where
+        <choose>
+            <when test="loginId!=null and loginId!=''">
+                LoginId like concat('%',#{loginId},'%')
+            </when>
+            <when test="loginPwd!=null and loginPwd!=''">
+                LoginPwd like concat('%',#{loginPwd},'%')
+            </when>
+            <otherwise>
+                1=1
+            </otherwise>
+        </choose>
+    </select>
     <!--    按照指定的列名查询满足条件的用户-->
     <select id="listUsers" parameterType="java.util.Properties" resultType="users">
         select
@@ -52,6 +75,4 @@
     <insert id="doRegister" parameterType="users" statementType="CALLABLE">
         {call sp_registers(#{loginId,mode=IN},#{loginPwd,mode=IN})}
     </insert>
-
-
 </mapper>

@@ -47,4 +47,14 @@ public class UserServiceImpl implements UserService {
     public List<Users> findListUsersByCondition(String field, String value) {
         return userDao.findListUsersByCondition(field, value);
     }
+
+    @Override
+    public List<Users> findUserInfo(String value) {
+        return userDao.findUserInfo(value);
+    }
+
+    @Override
+    public int findUserNumber(String loginId, String loginPwd) {
+        return userDao.findUserNumber(loginId, loginPwd);
+    }
 }

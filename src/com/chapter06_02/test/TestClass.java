@@ -12,11 +12,13 @@ public class TestClass {
 
     public static void main(String[] args) {
         TestClass testClass = new TestClass();
-        testClass.testFindAllUser();
+//        testClass.testFindAllUser();
 //        testClass.test();
 //        testClass.testUpdate();
 //        testClass.testRegister();
 //        testClass.testLogin();
+//        testClass.testFindUserInfoByLoginId();
+        testClass.testFindUserNumber();
     }
 
     public void testFindAllUser() {
@@ -102,4 +104,33 @@ public class TestClass {
             System.err.println("用户信息修改失败！");
         }
     }
+
+    public void testFindUserInfoByLoginId() {
+        ApplicationContext context = new ClassPathXmlApplicationContext("applicationContext.xml");
+        UserService userService = (UserService) context.getBean("userService");
+
+        Scanner scanner = new Scanner(System.in);
+        System.err.println("***********************通过LoginId查询用户信息************************");
+        System.err.println("请输入需要查询的LoginId：");
+        String value = scanner.nextLine();
+        List<Users> users = userService.findUserInfo(value);
+        for (Users user : users) {
+            System.err.println(user);
+        }
+    }
+
+    public void testFindUserNumber() {
+        ApplicationContext context = new ClassPathXmlApplicationContext("applicationContext.xml");
+        UserService userService = (UserService) context.getBean("userService");
+
+        Scanner scanner = new Scanner(System.in);
+        System.err.println("***********************查询符合条件的用户数************************");
+        System.err.println("请输入需要查询的LoginId：");
+        String loginId = scanner.nextLine();
+        System.err.println("请输入需要查询的LoginPwd：");
+        String loginPwd = scanner.nextLine();
+        int rows = userService.findUserNumber(loginId, loginPwd);
+        System.err.println("返回的记录数：" + rows);
+    }
+
 }

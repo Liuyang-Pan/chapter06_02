@@ -42,7 +42,6 @@ public interface UserDao {
      * @return true为注册成功，false为注册失败
      */
     public boolean doRegister(String name, String onePassword, String twoPassword);
-
     /**
      * 查找mybatis数据库中t_user表中的所有数据
      *
@@ -58,4 +57,20 @@ public interface UserDao {
      * @return 符合的结果
      */
     public List<Users> findListUsersByCondition(String field, String value);
+
+    /**
+     * 通过LoginId查询用户信息
+     *
+     * @return 符合条件的用户信息，如果条件为空，返回所有用户信息
+     */
+    public List<Users> findUserInfo(String value);
+
+    /**
+     * 查询满足条件的用户数
+     *
+     * @param loginId  满足的条件
+     * @param loginPwd 满足的条件
+     * @return 用户数
+     */
+    public int findUserNumber(String loginId, String loginPwd);
 }

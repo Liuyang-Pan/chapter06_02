@@ -1,7 +1,7 @@
 package com.chapter06_02.domain;
 
 /**
- * POJO类，和数据库中的users表一致
+ * POJO类，和mybookshop数据库中的users表一致
  *
  * @author Administrator
  */
@@ -32,7 +32,8 @@ public class Users {
         this.userStateId = userStateId;
     }
 
-    public Users(String loginId, String name, String address, String phone, String mail) {
+    public Users(int id, String loginId, String name, String address, String phone, String mail) {
+        this.id = id;
         this.loginId = loginId;
         this.name = name;
         this.address = address;

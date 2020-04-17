@@ -77,6 +77,14 @@ public class UserDaoImpl implements UserDao {
         return rows > 0 ? true : false;
     }
 
+    /**
+     * 注册方法实现
+     *
+     * @param name        用户名
+     * @param onePassword 第一次输入密码
+     * @param twoPassword 第二次输入密码
+     * @return true为注册成功，false为注册失败
+     */
     @Override
     public boolean doRegister(String name, String onePassword, String twoPassword) {
         Users users = new Users();
@@ -88,6 +96,11 @@ public class UserDaoImpl implements UserDao {
         return rows > 0 ? true : false;
     }
 
+    /**
+     * 查找mybatis数据库中t_user表中的所有数据
+     *
+     * @return 所有用户信息
+     */
     @Override
     public List<User> findAllUser() {
         List<User> list = sqlSessionForMybatis.selectList("com.chapter06_02.mapper.UsersMapper.findAllUser");
@@ -95,6 +108,13 @@ public class UserDaoImpl implements UserDao {
         return list;
     }
 
+    /**
+     * 从Users表中查找列为field，值包含value的所有用户信息
+     *
+     * @param field 列名
+     * @param value 值
+     * @return 符合的结果
+     */
     @Override
     public List<Users> findListUsersByCondition(String field, String value) {
         Properties properties = new Properties();
@@ -103,5 +123,22 @@ public class UserDaoImpl implements UserDao {
         List<Users> users = sqlSession.selectList("com.chapter06_02.mapper.UsersMapper.listUsersByCondition", properties);
         sqlSession.close();
         return users;
+    }
+
+    @Override
+    public List<Users> findUserInfo(String value) {
+        List<Users> users = sqlSession.selectList("com.chapter06_02.mapper.UsersMapper.findUserInfo", value);
+        sqlSession.close();
+        return users;
+    }
+
+    @Override
+    public int findUserNumber(String loginId, String loginPwd) {
+        Users users = new Users();
+        users.setLoginId(loginId);
+        users.setLoginPwd(loginPwd);
+        int rows = sqlSession.selectOne("com.chapter06_02.mapper.UsersMapper.findUserNumber", users);
+        sqlSession.close();
+        return rows;
     }
 }
